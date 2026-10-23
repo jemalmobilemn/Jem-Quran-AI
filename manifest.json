@@ -1,0 +1,14 @@
+{
+  "name": "Nur — ቁርኣን እና ተፍሲር",
+  "short_name": "Nur",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f4f6f8",
+  "theme_color": "#0e7c5a",
+  "lang": "am",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
