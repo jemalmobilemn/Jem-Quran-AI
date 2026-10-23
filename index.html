@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="am" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0e7c5a">
+<title>Nur — ቁርኣን እና ተፍሲር</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Sans+Ethiopic:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f6f8;--card:#fff;--text:#12151a;--muted:#6b7280;--brand:#0e7c5a;
+--line:#e6e8ec;--fs:18px;--r:16px}
+[data-theme=dark]{--bg:#0d1117;--card:#161b22;--text:#e6edf3;--muted:#8b949e;
+--brand:#2ea043;--line:#21262d}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--text);
+font-family:"Noto Sans Ethiopic",system-ui,-apple-system,sans-serif;font-size:15px}
+#app{max-width:520px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;
+background:var(--bg);box-shadow:0 0 50px rgba(0,0,0,.06)}
+.topbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:10px;
+padding:calc(env(safe-area-inset-top) + 12px) 14px 12px;background:var(--card);
+border-bottom:1px solid var(--line)}
+.ttl{flex:1;min-width:0}
+.ttl h1{margin:0;font-size:17px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ttl p{margin:2px 0 0;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ibtn{background:none;border:0;color:var(--text);font-size:22px;width:38px;height:38px;
+border-radius:50%;cursor:pointer;display:grid;place-items:center;flex:0 0 auto}
+.ibtn:active{background:var(--line)}
+main{flex:1;padding-bottom:calc(90px + env(safe-area-inset-bottom))}
+.pad{padding:14px}
+.tabs{position:fixed;bottom:0;left:0;right:0;max-width:520px;margin:0 auto;z-index:30;
+display:grid;grid-template-columns:repeat(4,1fr);background:var(--card);
+border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+.tabs button{background:none;border:0;padding:9px 2px 8px;color:var(--muted);font-size:10.5px;
+display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;font-family:inherit}
+.tabs button.active{color:var(--brand);font-weight:600}
+.tabs .ico{font-size:19px;line-height:1}
+.search{width:100%;padding:12px 14px;border-radius:14px;border:1px solid var(--line);
+background:var(--card);color:var(--text);font-family:inherit;font-size:15px;margin-bottom:12px}
+.list{display:flex;flex-direction:column;gap:8px}
+.row{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px 14px;
+background:var(--card);border:1px solid var(--line);border-radius:14px;color:var(--text);
+font-family:inherit;font-size:14px;cursor:pointer;text-decoration:none}
+.row:active{transform:scale(.99)}
+.row .num{width:34px;height:34px;border-radius:10px;background:var(--brand);color:#fff;
+display:grid;place-items:center;font-size:12.5px;font-weight:600;flex:0 0 auto}
+.row .grow{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.row b{font-weight:600;font-size:14.5px}
+.row small{color:var(--muted);font-size:11.5px}
+.row .ar2{font-family:"Amiri",serif;font-size:19px;color:var(--muted);flex:0 0 auto}
+.row .chev{color:var(--muted);font-size:20px}
+.ico2{font-size:20px;flex:0 0 auto}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+padding:14px;margin-bottom:12px}
+.card h3{margin:0 0 10px;font-size:13px;color:var(--brand);font-weight:600;
+letter-spacing:.02em;text-transform:uppercase}
+.card.err{border-color:#e5484d;color:#e5484d}
+.surah-head{text-align:center;padding:18px 10px 14px;margin-bottom:6px}
+.surah-head h2{margin:0;font-family:"Amiri",serif;font-size:30px;font-weight:700}
+.surah-head p{margin:6px 0 0;font-size:12px;color:var(--muted)}
+.ayah{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+padding:12px 14px;margin-bottom:10px}
+.ayhead{display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.badge{width:26px;height:26px;border-radius:8px;background:var(--bg);border:1px solid var(--line);
+display:grid;place-items:center;font-size:11.5px;color:var(--muted);font-weight:600}
+.mini{background:var(--bg);border:1px solid var(--line);color:var(--text);border-radius:9px;
+width:32px;height:32px;font-size:13px;cursor:pointer;display:grid;place-items:center}
+.mini:active{background:var(--line)}
+.grow-s{flex:1}
+.ar{font-family:"Amiri","Noto Naskh Arabic",serif;direction:rtl;text-align:right;
+font-size:calc(var(--fs) * 1.55);line-height:2.05;margin:6px 0 0}
+.ar.sm{font-size:calc(var(--fs) * 1.1);line-height:1.95;color:var(--text)}
+.tr{color:var(--muted);font-size:14.5px;line-height:1.8;margin:10px 0 0}
+.en{font-size:14px;line-height:1.75;margin:0;color:var(--text)}
+.loading{text-align:center;color:var(--muted);padding:34px 0;font-size:14px}
+.empty{text-align:center;color:var(--muted);padding:26px 0}
+.note{background:var(--card);border:1px dashed var(--line);border-radius:12px;
+padding:11px 13px;font-size:12px;color:var(--muted);line-height:1.65;margin:12px 0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+label{display:block;font-size:11.5px;color:var(--muted);margin-bottom:5px;font-weight:600}
+select,input[type=number]{width:100%;padding:11px 12px;border-radius:11px;border:1px solid var(--line);
+background:var(--bg);color:var(--text);font-family:inherit;font-size:14.5px}
+.btn{width:100%;padding:13px;border-radius:13px;border:1px solid var(--line);background:var(--card);
+color:var(--text);font-family:inherit;font-size:14.5px;font-weight:600;cursor:pointer}
+.btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+.btn:active{opacity:.85}
+.rowline{display:flex;align-items:center;justify-content:space-between;gap:12px;
+padding:13px 0;border-bottom:1px solid var(--line)}
+.rowline:last-child{border-bottom:0}
+.rowline span{font-size:14px}
+.switch{width:48px;height:28px;border-radius:99px;background:var(--line);position:relative;
+cursor:pointer;border:0;transition:.2s;flex:0 0 auto}
+.switch::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;
+border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.switch.on{background:var(--brand)}
+.switch.on::after{left:23px}
+.toast{position:fixed;bottom:calc(100px + env(safe-area-inset-bottom));left:50%;
+transform:translateX(-50%) translateY(20px);background:#222;color:#fff;padding:11px 18px;
+border-radius:99px;font-size:13px;opacity:0;pointer-events:none;transition:.25s;z-index:99}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+[hidden]{display:none !important}
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="topbar">
+    <button class="ibtn" id="back" hidden>‹</button>
+    <div class="ttl"><h1 id="title">ቁርኣን</h1><p id="subtitle" hidden></p></div>
+    <button class="ibtn" id="theme">◐</button>
+  </header>
+  <main id="view"></main>
+  <nav class="tabs">
+    <button data-tab="quran"><span class="ico">📖</span><span>ቁርኣን</span></button>
+    <button data-tab="tafsir"><span class="ico">📜</span><span>ተፍሲር</span></button>
+    <button data-tab="masjid"><span class="ico">🕌</span><span>መስጊድ</span></button>
+    <button data-tab="settings"><span class="ico">⚙️</span><span>ቅንብር</span></button>
+  </nav>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ helpers ============ */
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c =>
+  ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+const API = 'https://api.alquran.cloud/v1';
+const AUDIO = 'https://cdn.islamic.network/quran/audio/128/ar.alafasy';
+const LANGS = { am: 'አማርኛ', om: 'Afaan Oromoo', en: 'English', ar: 'العربية' };
+
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
+  del(k) { try { localStorage.removeItem(k); } catch {} },
+  clear() { try { localStorage.clear(); } catch {} }
+};
+
+async function getJSON(url, ttl = 30 * 864e5) {
+  const key = 'c:' + url;
+  const hit = store.get(key);
+  if (hit && Date.now() - hit.t < ttl) return hit.v;
+  const r = await fetch(url);
+  if (!r.ok) throw new Error('HTTP ' + r.status);
+  const v = await r.json();
+  store.set(key, { t: Date.now(), v });
+  return v;
+}
+
+let toastTimer;
+function toast(msg) {
+  const t = $('#toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function stripHtml(h) {
+  if (!h) return '';
+  const d = new DOMParser().parseFromString(h, 'text/html');
+  d.querySelectorAll('sup').forEach(n => n.remove());
+  return (d.body.textContent || '').replace(/\s+/g, ' ').trim();
+}
+
+function haversine(a, b, c, d) {
+  const R = 6371000, r = Math.PI / 180;
+  const dLat = (c - a) * r, dLon = (d - b) * r;
+  const x = Math.sin(dLat / 2) ** 2 +
+    Math.cos(a * r) * Math.cos(c * r) * Math.sin(dLon / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(x));
+}
+
+/* ============ state ============ */
+const state = {
+  tab: store.get('tab', 'quran'),
+  lang: store.get('lang', 'am'),
+  theme: store.get('theme', 'light'),
+  fs: store.get('fs', 18),
+  screen: { name: 'surahs' }
+};
+
+function applyTheme() {
+  document.documentElement.dataset.theme = state.theme;
+  document.documentElement.style.setProperty('--fs', state.fs + 'px');
+}
+
+function setChrome(title, sub) {
+  $('#title').textContent = title;
+  const s = $('#subtitle');
+  s.textContent = sub || '';
+  s.hidden = !sub;
+}
+
+/* ============ audio ============ */
+const audioEl = new Audio();
+let playingBtn = null;
+audioEl.addEventListener('ended', () => {
+  if (playingBtn) { playingBtn.textContent = '▶'; playingBtn = null; }
+});
+function playAyah(globalNum, btn) {
+  if (playingBtn === btn && !audioEl.paused) {
+    audioEl.pause(); btn.textContent = '▶'; playingBtn = null; return;
+  }
+  if (playingBtn) playingBtn.textContent = '▶';
+  audioEl.src = `${AUDIO}/${globalNum}.mp3`;
+  audioEl.play().then(() => { btn.textContent = '⏸'; playingBtn = btn; })
+    .catch(() => toast('ድምፅ ማጫወት አልተቻለም'));
+}
+
+/* ============ data ============ */
+let surahsCache = null;
+async function loadSurahs() {
+  if (surahsCache) return surahsCache;
+  const j = await getJSON(`${API}/surah`);
+  surahsCache = j.data;
+  return surahsCache;
+}
+
+const trCache = {};
+async function resolveTranslation(lang) {
+  if (lang === 'ar') return null;
+  if (trCache[lang] !== undefined) return trCache[lang];
+  const key = 'tr:' + lang;
+  const cached = store.get(key);
+  if (cached) return (trCache[lang] = cached);
+  try {
+    const j = await getJSON(`${API}/edition?format=text&type=translation&language=${lang}`);
+    const id = j.data?.[0]?.identifier || null;
+    if (id) { store.set(key, id); return (trCache[lang] = id); }
+  } catch {}
+  return (trCache[lang] = 'en.sahih');
+}
+
+/* ============ router ============ */
+async function render() {
+  applyTheme();
+  const sc = state.screen;
+  $('#back').hidden = !sc.back;
+  $$('.tabs button').forEach(b => b.classList.toggle('active', b.dataset.tab === state.tab));
+  try {
+    if (sc.name === 'surahs') await viewSurahs();
+    else if (sc.name === 'surah') await viewSurah(sc.n);
+    else if (sc.name === 'tafsir') await viewTafsir(sc.s, sc.a);
+    else if (sc.name === 'masjid') viewMasjid();
+    else if (sc.name === 'settings') viewSettings();
+  } catch (e) {
+    $('#view').innerHTML = `<div class="pad"><div class="card err">
+      <b>ስህተት፦</b> ${esc(e.message)}<br>
+      <small>የኢንተርኔት ግንኙነትዎን ያረጋግጡ።</small></div></div>`;
+  }
+}
+
+function go(screen) { state.screen = screen; window.scrollTo(0, 0); render(); }
+
+function setTab(tab) {
+  state.tab = tab; store.set('tab', tab);
+  state.screen =
+    tab === 'quran' ? { name: 'surahs' } :
+    tab === 'tafsir' ? { name: 'tafsir' } :
+    tab === 'masjid' ? { name: 'masjid' } : { name: 'settings' };
+  window.scrollTo(0, 0);
+  render();
+}
+
+/* ============ 1. surah list ============ */
+async function viewSurahs() {
+  setChrome('ቁርኣን', '114 ሱራ · ' + LANGS[state.lang]);
+  const list = await loadSurahs();
+  const last = store.get('lastRead', null);
+
+  $('#view').innerHTML = `<div class="pad">
+    ${last ? `<button class="row" id="resume" style="margin-bottom:12px">
+      <span class="ico2">🔖</span>
+      <span class="grow"><b>የቀጠለ ንባብ</b><small>${esc(last.name)} · አያህ ${last.a}</small></span>
+      <span class="chev">›</span></button>` : ''}
+    <input class="search" id="q" placeholder="ሱራ ፈልግ...">
+    <div class="list" id="list"></div>
+  </div>`;
+
+  const draw = (filter = '') => {
+    const f = filter.trim().toLowerCase();
+    const items = list.filter(s =>
+      !f || s.englishName.toLowerCase().includes(f) ||
+      s.name.includes(f) || String(s.number) === f);
+    $('#list').innerHTML = items.map(s => `
+      <button class="row" data-n="${s.number}">
+        <span class="num">${s.number}</span>
+        <span class="grow"><b>${esc(s.englishName)}</b>
+          <small>${s.numberOfAyahs} አያህ · ${s.revelationType}</small></span>
+        <span class="ar2">${esc(s.name.replace('سُورَةُ ', ''))}</span>
+      </button>`).join('') || '<p class="empty">አልተገኘም</p>';
+  };
+  draw();
+
+  $('#q').addEventListener('input', e => draw(e.target.value));
+  $('#list').addEventListener('click', e => {
+    const b = e.target.closest('.row');
+    if (b) go({ name: 'surah', n: +b.dataset.n, back: true });
+  });
+  const r = $('#resume');
+  if (r) r.onclick = () => go({ name: 'surah', n: last.n, back: true });
+}
+
+/* ============ 2. surah reader ============ */
+async function viewSurah(n) {
+  setChrome('ይጫናል…', '');
+  $('#view').innerHTML = '<div class="pad"><div class="loading">ይጫናል…</div></div>';
+
+  const trId = await resolveTranslation(state.lang);
+  const eds = trId ? `quran-uthmani,${trId}` : 'quran-uthmani';
+  const j = await getJSON(`${API}/surah/${n}/editions/${eds}`);
+  const arr = Array.isArray(j.data) ? j.data : [j.data];
+  const byId = {}; arr.forEach(x => byId[x.edition.identifier] = x);
+  const ar = byId['quran-uthmani'];
+  const tr = trId ? byId[trId] : null;
+
+  setChrome(ar.englishName, `${ar.name} · ${ar.numberOfAyahs} አያህ`);
+  store.set('lastRead', { n, a: 1, name: ar.englishName });
+
+  const body = ar.ayahs.map((a, i) => {
+    const t = tr?.ayahs?.[i]?.text || '';
+    return `<article class="ayah">
+      <div class="ayhead">
+        <span class="badge">${a.numberInSurah}</span>
+        <span class="grow-s"></span>
+        <button class="mini" data-play="${a.number}">▶</button>
+        <button class="mini" data-taf="${a.numberInSurah}">📜</button>
+      </div>
+      <p class="ar">${esc(a.text)}</p>
+      ${t ? `<p class="tr">${esc(t)}</p>` : ''}
+    </article>`;
+  }).join('');
+
+  $('#view').innerHTML = `<div class="pad">
+    ${trId ? '' : `<div class="note">የ${LANGS[state.lang]} ትርጉም በአሁኑ ምንጭ አልተገኘም፤ በእንግሊዝኛ ታይቷል።</div>`}
+    <div class="surah-head"><h2>${esc(ar.name)}</h2>
+      <p>${esc(ar.englishName)} · ${ar.numberOfAyahs} አያህ · ${ar.revelationType}</p></div>
+    ${body}
+    <div class="note">ይህ መተግበሪያ የትምህርት ድጋፍ መሣሪያ ነው፤ የሃይማኖት ባለስልጣን አይደለም። ለግል ውሳኔዎች ምሁራንን ያማክሩ።</div>
+  </div>`;
+
+  $('#view').addEventListener('click', e => {
+    const p = e.target.closest('[data-play]');
+    if (p) return playAyah(+p.dataset.play, p);
+    const t = e.target.closest('[data-taf]');
+    if (t) {
+      state.tab = 'tafsir';
+      go({ name: 'tafsir', s: n, a: +t.dataset.taf, back: false });
+    }
+  });
+}
+
+/* ============ 3. tafsir ============ */
+async function viewTafsir(s, a) {
+  setChrome('ተፍሲር', s ? `${s}:${a}` : '');
+  const surahs = await loadSurahs();
+  $('#view').innerHTML = `<div class="pad">
+    <div class="card">
+      <div class="grid2">
+        <div><label>ሱራ</label><select id="ts">
+          ${surahs.map(x => `<option value="${x.number}" ${x.number === (s || 1) ? 'selected' : ''}>
+            ${x.number}. ${esc(x.englishName)}</option>`).join('')}
+        </select></div>
+        <div><label>አያህ</label><input id="ta" type="number" min="1" value="${a || 1}"></div>
+      </div>
+      <button class="btn primary" id="tgo">ተፍሲር አሳይ</button>
+    </div>
+    <div id="tout"></div>
+  </div>`;
+
+  $('#tgo').onclick = () => {
+    const s2 = +$('#ts').value, a2 = Math.max(1, +($('#ta').value || 1));
+    state.screen = { name: 'tafsir', s: s2, a: a2, back: false };
+    render();
+  };
+  if (s && a) showTafsir(s, a);
+}
+
+async function showTafsir(s, a) {
+  const out = $('#tout');
+  out.innerHTML = '<div class="loading">ተፍሲር ይጫናል…</div>';
+  const ref = `${s}:${a}`;
+
+  let ar = null, tafAr = null, tr = null;
+  const trId = await resolveTranslation(state.lang);
+  const eds = ['quran-uthmani', 'ar.muyassar', trId].filter(Boolean).join(',');
+
+  try {
+    const j = await getJSON(`${API}/ayah/${ref}/editions/${eds}`);
+    const arr = Array.isArray(j.data) ? j.data : [j.data];
+    const byId = {}; arr.forEach(x => byId[x.edition.identifier] = x);
+    ar = byId['quran-uthmani']?.text || null;
+    tafAr = byId['ar.muyassar']?.text || byId['ar.jalalayn']?.text || null;
+    tr = trId ? byId[trId]?.text : null;
+  } catch (e) {
+    out.innerHTML = `<div class="card err">አያሁን ማምጣት አልተቻለም።</div>`;
+    return;
+  }
+
+  let tafEn = null;
+  try {
+    const j = await getJSON(`https://api.quran.com/api/v4/tafsirs/169/by_ayah/${ref}`, 10 * 864e5);
+    tafEn = stripHtml(j.tafsir?.text || '');
+  } catch {}
+
+  out.innerHTML = `
+    <article class="ayah">
+      <p class="ar">${esc(ar || '')}</p>
+      ${tr ? `<p class="tr">${esc(tr)}</p>` : ''}
+    </article>
+    ${tafAr ? `<section class="card"><h3>التفسير الميسر</h3>
+      <p class="ar sm">${esc(tafAr)}</p></section>` : ''}
+    ${tafEn ? `<section class="card"><h3>Tafsir Ibn Kathir (English)</h3>
+      <p class="en">${esc(tafEn)}</p></section>` : ''}
+    ${!tafAr && !tafEn ? `<div class="note">ለዚህ አያህ ተፍሲር አልተገኘም።</div>` : ''}
+    <div class="note">ምንጮች፦ AlQuran Cloud (التفسير الميسر) እና Quran.com
+      (Tafsir Ibn Kathir — abridged). ለግል ውሳኔዎች ምሁራንን ያማክሩ።</div>`;
+}
+
+/* ============ 4. masjid ============ */
+function viewMasjid() {
+  setChrome('መስጊድ', 'በአቅራቢያዎ');
+  $('#view').innerHTML = `<div class="pad">
+    <button class="btn primary" id="find">📍 አቅራቢያ መስጊዶችን ፈልግ</button>
+    <div id="mout" style="margin-top:14px"></div>
+    <div class="note">መረጃው ከ OpenStreetMap ነው። ሁሉም መስጊዶች ላይመዘገቡ ይችላሉ።</div>
+  </div>`;
+  $('#find').onclick = findMosques;
+}
+
+function findMosques() {
+  const out = $('#mout');
+  if (!navigator.geolocation) {
+    out.innerHTML = '<div class="card err">ጂኦሎኬሽን አይደገፍም።</div>'; return;
+  }
+  out.innerHTML = '<div class="loading">ቦታዎን በመፈለግ ላይ…</div>';
+  navigator.geolocation.getCurrentPosition(async pos => {
+    const lat = pos.coords.latitude, lon = pos.coords.longitude;
+    out.innerHTML = '<div class="loading">መስጊዶች በመፈለግ ላይ…</div>';
+    const q = `[out:json][timeout:25];
+      nwr["amenity"="place_of_worship"]["religion"="muslim"](around:5000,${lat},${lon});
+      out center 60;`;
+    try {
+      const r = await fetch('https://overpass-api.de/api/interpreter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'data=' + encodeURIComponent(q)
+      });
+      const j = await r.json();
+      const items = (j.elements || []).map(el => {
+        const la = el.lat ?? el.center?.lat, lo = el.lon ?? el.center?.lon;
+        return {
+          name: el.tags?.name || el.tags?.['name:en'] || el.tags?.['name:am'] || 'መስጊድ',
+          la, lo, d: haversine(lat, lon, la, lo)
+        };
+      }).filter(x => x.la && x.lo).sort((x, y) => x.d - y.d);
+
+      out.innerHTML = items.length ? `<div class="list">${items.map(m => `
+        <a class="row" href="https://www.google.com/maps?q=${m.la},${m.lo}"
+           target="_blank" rel="noopener">
+          <span class="ico2">🕌</span>
+          <span class="grow"><b>${esc(m.name)}</b>
+            <small>${m.d < 1000 ? Math.round(m.d) + ' ሜ' : (m.d / 1000).toFixed(1) + ' ኪሜ'}</small></span>
+          <span class="chev">›</span>
+        </a>`).join('')}</div>`
+        : '<div class="card">በ5 ኪሜ ስር መስጊድ አልተገኘም።</div>';
+    } catch {
+      out.innerHTML = '<div class="card err">መስጊዶችን መፈለግ አልተቻለም። በኋላ ይሞክሩ።</div>';
+    }
+  }, () => {
+    out.innerHTML = '<div class="card err">የቦታ ፈቃድ አልተሰጠም።</div>';
+  }, { timeout: 15000 });
+}
+
+/* ============ 5. settings ============ */
+function viewSettings() {
+  setChrome('ቅንብር', '');
+  $('#view').innerHTML = `<div class="pad">
+    <div class="card">
+      <h3>ትርጉም ቋንቋ</h3>
+      ${Object.entries(LANGS).map(([k, v]) => `
+        <label class="rowline" style="margin:0">
+          <span>${v}</span>
+          <input type="radio" name="lang" value="${k}" ${state.lang === k ? 'checked' : ''}>
+        </label>`).join('')}
+    </div>
+    <div class="card">
+      <h3>ገጽታ</h3>
+      <div class="rowline"><span>ጨለማ ሁነታ</span>
+        <button class="switch ${state.theme === 'dark' ? 'on' : ''}" id="thm"></button></div>
+      <div class="rowline"><span>የፊደል መጠን</span>
+        <input type="range" id="fs" min="14" max="26" value="${state.fs}" style="width:140px"></div>
+    </div>
+    <div class="card">
+      <h3>መረጃ</h3>
+      <p class="en" style="color:var(--muted)">
+        ቁርኣን፦ api.alquran.cloud · ተፍሲር፦ AlQuran Cloud &amp; Quran.com ·
+        መስጊድ፦ OpenStreetMap · ድምፅ፦ cdn.islamic.network
+      </p>
+    </div>
+    <button class="btn" id="clear" style="color:#e5484d">ካሽ አጽዳ</button>
+    <div class="note">ይህ መተግበሪያ የትምህርት ድጋፍ መሣሪያ ነው።
+      የቁርኣን ትርጉም ወይም ተፍሲር በሰው ምሁራን ከተረጋገጠ ምንጭ የተወሰደ ነው፤
+      ለግል ውሳኔዎች ግን ምሁራንን ማማከር ያስፈልጋል።</div>
+  </div>`;
+
+  $$('input[name=lang]').forEach(r => r.onchange = () => {
+    state.lang = r.value; store.set('lang', r.value);
+    surahsCache = null;
+    toast('ቋንቋ ተቀይሯል፦ ' + LANGS[r.value]);
+  });
+  $('#thm').onclick = e => {
+    state.theme = state.theme === 'dark' ? 'light' : 'dark';
+    store.set('theme', state.theme);
+    applyTheme();
+    e.currentTarget.classList.toggle('on', state.theme === 'dark');
+  };
+  $('#fs').oninput = e => {
+    state.fs = +e.target.value; store.set('fs', state.fs); applyTheme();
+  };
+  $('#clear').onclick = () => {
+    if (confirm('ካሽ ይጽዳ?')) { store.clear(); location.reload(); }
+  };
+}
+
+/* ============ boot ============ */
+$('#back').onclick = () => {
+  if (state.screen.name === 'surah') go({ name: 'surahs' });
+};
+$('#theme').onclick = () => {
+  state.theme = state.theme === 'dark' ? 'light' : 'dark';
+  store.set('theme', state.theme); applyTheme();
+};
+$$('.tabs button').forEach(b => b.onclick = () => setTab(b.dataset.tab));
+
+applyTheme();
+setTab(state.tab);
+
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+</script>
+</body>
+</html>
