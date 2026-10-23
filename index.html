@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="am">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Quran AI MVP</title>
+  <style>
+    body{font-family:system-ui;max-width:800px;margin:24px auto;padding:0 16px}
+    textarea,input,select{width:100%;padding:10px;margin:6px 0}
+    button{padding:10px 16px;margin:6px 0}
+    .box{background:#f6f6f6;padding:12px;border-radius:8px;white-space:pre-wrap}
+  </style>
+</head>
+<body>
+  <h1>Quran AI MVP</h1>
+
+  <h2>የተፍሲር ጥያቄ</h2>
+  <textarea id="q" rows="4" placeholder="ጥያቄዎን ይጻፉ..."></textarea>
+  <select id="lang">
+    <option value="am">አማርኛ</option>
+    <option value="om">Afaan Oromoo</option>
+    <option value="en">English</option>
+    <option value="ar">العربية</option>
+  </select>
+  <button onclick="ask()">ጠይቅ</button>
+  <div id="answer" class="box"></div>
+
+  <h2>አቅራቢያ መስጊዶች</h2>
+  <button onclick="findMosques()">የአሁኑን ቦታ ተጠቅሜ ፈልግ</button>
+  <div id="mosques" class="box"></div>
+
+  <script>
+    async function ask(){
+      const question = document.getElementById('q').value;
+      const lang = document.getElementById('lang').value;
+      const res = await fetch('/ask', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({question, lang})
+      });
+      const data = await res.json();
+      document.getElementById('answer').textContent =
+        (data.answer || data.detail || 'ስህተት') +
+        (data.sources ? '\n\nምንጮች:\n' + data.sources.join('\n') : '');
+    }
+
+    function findMosques(){
+      if(!navigator.geolocation){ alert('Geolocation አይደገፍም'); return; }
+      navigator.geolocation.getCurrentPosition(async pos => {
+        const lat = pos.coords.latitude, lon = pos.coords.longitude;
+        const res = await fetch(`/mosques?lat=${lat}&lon=${lon}&radius=3000`);
+        const data = await res.json();
+        document.getElementById('mosques').textContent =
+          (data.mosques || []).map(m => `${m.name} — ${m.lat}, ${m.lon}`).join('\n') || 'አልተገኘም';
+      });
+    }
+  </script>
+</body>
+</html>
